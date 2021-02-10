@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body onload="init()">
+  <div class="main-header flex align-items-center">
+    <div class="logo"> logo </div>
+    <ul class="main-nav flex clean-list justify-start ">
+      <li class="flex clean-list justify-content-center"><a href="#">Gallery</a></li>
+      <li class="flex clean-list justify-content-center"><a href="#">About</a></li>
+  </ul>
+  </div>
+
+  <main class="main-container-gallery">
+    <section class="gallery-container">
+      <div class="gallery-grid-container">
+        <div class="imgs-grid"></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="meme-area-container flex justify-space-even align-items-center display-none">
+    <div class="canvas-container">
+      <canvas id="my-canvas" width="450" height="450" style="outline:1px solid green"></canvas>
+    </div>
+
+    <div class="meme-prop flex column justify-space-even">
+      <input class="meme-text" type="text" placeholder="enter text">
+      <div class="buttons-holder flex align-items-center">
+        <button class="btn"  onclick="addText()"><img class="img-btn" src="icns/icn-add.png"></button>
+        <button class="btn" onclick="RemoveText()" ><img class="img-btn" src="icns/Remove.png"></button>
+        <button class="move-btn btn" onclick="ToggleMove()">Move</button>
+      </div>
+      <div class="meme-design flex align-items-center">
+        <button class="btn" onclick="changeSize(2)"><img src="icns/icn-a-plus.png"></button>
+        <button class="btn"  onclick="changeSize(-2)"><img src="icns/icn-a-minus.png"></button>
+        <!-- <button class="btn"  onclick="changeAlign('left')">align L</button>
+        <button class="btn"  onclick="changeAlign('center')">align C</button>
+        <button class="btn"  onclick="changeAlign('right')">align R</button> --->
+        <input class="btn color-picker-text"  type="color">
+      </div>
+      <div class="save-share">
+        <button>download</button>
+        <button>share</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+
+</html>
