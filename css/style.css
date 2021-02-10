@@ -7,10 +7,10 @@ body {
   padding: 0px;
   align-items: center;
   text-align: center;
-  background-color: #5c57f2;
+  background-color: #ffb997;
 }
 
-#my-canvas{
+#my-canvas {
   border-radius: 15px;
 }
 
@@ -19,10 +19,12 @@ body {
   left: 25%;
   top: 30px;
 }
-.img-btn{
+
+.img-btn {
   height: 100%;
   width: 100%;
 }
+
 .btn {
   height: 50px;
   width: 50px;
@@ -39,12 +41,14 @@ body {
 }
 
 .main-header {
-  background: linear-gradient(to bottom, #85c797 70%, #5c57f2 100%);
-  background-color: #85c797;
+  background: linear-gradient(to top, #ffb997 5%, #f67e7d 100%);
+  background-color: #ffb997;
 }
-.meme-text{
+
+.meme-text {
   margin-bottom: 10px;
 }
+
 .main-nav {
   width: 100%;
 }
@@ -106,6 +110,9 @@ body {
 .column {
   flex-direction: column;
 }
+.row-reverse{
+  flex-direction: row-reverse;
+}
 
 .justify-center {
   justify-content: center;
@@ -114,9 +121,11 @@ body {
 .justify-space-between {
   justify-content: space-between;
 }
+
 .justify-start {
   justify-content: start;
 }
+
 .justify-space-even {
   justify-content: space-evenly;
 }
@@ -127,14 +136,6 @@ body {
 
 .align-items-center {
   align-items: center;
-}
-
-.align-self-center {
-  align-self: center;
-}
-
-.align-self-end {
-  align-self: end;
 }
 
 .align-items-end {
@@ -150,11 +151,12 @@ body {
 
 
 @media screen and (max-width: 800px) {
-  .meme-area-container{
+  .meme-area-container {
     display: flex;
     flex-direction: column;
   }
-  .canvas-container{
+
+  .canvas-container {
     margin-bottom: 30px;
   }
 }
