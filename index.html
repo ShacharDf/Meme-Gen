@@ -6,52 +6,74 @@
 </head>
 
 <body onload="init()">
-  <div class="main-header flex align-items-center">
-    <div class="logo"> logo </div>
-    <ul class="main-nav flex row-reverse clean-list">
-      <li class="flex clean-list"><a href="#">About</a></li>
-      <li class="flex clean-list"><a href="#">Gallery</a></li>
-    </ul>
-  </div>
-
-
-  
-  <main class="main-container-gallery">
-    <section class="gallery-container">
-      <div class="gallery-grid-container">
-        <div class="imgs-grid"></div>
-      </div>
-    </section>
-  </main>
-
-  <div class="meme-area-container flex justify-space-even align-items-center display-none">
-    <div class="canvas-container">
-      <canvas id="my-canvas" width="450" height="450" style="outline:1px solid green"></canvas>
+    <!-- nav -->
+    <div class="main-header flex justify-center align-items-center">
+      <div class="logo"><img class="logo" src="icns/logo-simp.png"> </div>
+      <ul class="main-nav flex row-reverse clean-list">
+        <li class="flex clean-list"><a href="#">About</a></li>
+        <li class="flex clean-list" ><a href="#" onclick="returnToGallery()" class="selected gallery">Gallery</a></li>
+      </ul>
     </div>
 
-    <div class="meme-prop flex column justify-space-even">
-      <input class="meme-text" type="text" placeholder="enter text">
-      <div class="buttons-holder flex align-items-center">
-        <button class="btn" onclick="addText()"><img class="img-btn" src="icns/icn-add.png"></button>
-        <button class="btn" onclick="RemoveText()"><img class="img-btn" src="icns/Remove.png"></button>
-        <button class="move-btn btn" onclick="ToggleMove()">Move</button>
+    <!-- search -->
+    <div class="search flex justify-center">
+      <input type="text" class="search-text" placeholder="Search" oninput="changeSearch(this);">
+
+      <div class="keywords-holder">
+        <span class="keywords"></span>
       </div>
-      <div class="meme-design flex align-items-center">
-        <button class="btn" onclick="changeSize(2)"><img src="icns/icn-a-plus.png"></button>
-        <button class="btn" onclick="changeSize(-2)"><img src="icns/icn-a-minus.png"></button>
-        <!-- <button class="btn"  onclick="changeAlign('left')">align L</button>
+    </div>
+
+    <!-- gallery -->
+    <main class="main-container-gallery">
+      <section class="gallery-container">
+        <div class="gallery-grid-container">
+          <div class="imgs-grid"></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- editor -->
+    <!-- canvas -->
+    <div class="meme-area-container flex justify-space-even align-items-center display-none">
+      <div class="canvas-container">
+        <canvas id="my-canvas" width="450" height="450"></canvas>
+      </div>
+
+      <!-- edit -->
+      <div class="meme-prop flex column justify-space-even">
+        <input class="meme-text" type="text" placeholder="enter text">
+        <div class="buttons-holder flex align-items-center">
+          <button class="btn" onclick="addText()"><img class="img-btn" src="icns/icn-add.png"></button>
+          <button class="btn" onclick="RemoveText()"><img class="img-btn" src="icns/Remove.png"></button>
+        </div>
+        <div class="meme-design flex align-items-center">
+          <button class="btn" onclick="changeSize(2)"><img src="icns/icn-a-plus.png"></button>
+          <button class="btn" onclick="changeSize(-2)"><img src="icns/icn-a-minus.png"></button>
+          <!-- <button class="btn"  onclick="changeAlign('left')">align L</button>
         <button class="btn"  onclick="changeAlign('center')">align C</button>
         <button class="btn"  onclick="changeAlign('right')">align R</button> --->
-        <input class="btn color-picker-text" type="color">
+          <input class="btn color-picker-text" onchange="changeColor()" type="color">
+        </div>
+
+        <!-- stickersssssssss-->
+        <div class="stickers-holder">
+
+
+        </div>
+
+        <div class="save-share">
+          <form action="" method="POST" enctype="multipart/form-data" onsubmit="uploadImg(this, event)">
+            <input name="img" id="imgData" type="hidden" />
+            <button class="s-s-btn" type="submit">Generate Facebook link</button>
+            <a class="btn" href="#" onclick="downloadImg(this)" download="my-meme.jpg">Download
+              <div class="share-container"></div>
+          </form>
+        </div>
       </div>
-      <div class="save-share">
-        <button>download</button>
-        <button>share</button>
-      </div>
+
     </div>
-
-  </div>
-
+  <script src="js/upload-service.js"></script>
   <script src="js/main_service.js"></script>
   <script src="js/main.js"></script>
 </body>

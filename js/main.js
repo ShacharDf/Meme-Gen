@@ -1,8 +1,7 @@
 var gElCanvas = document.querySelector('#my-canvas');
 var gCtx = gElCanvas.getContext('2d');
 const gTouchEvs = ['touchstart', 'touchmove', 'touchend']
-var gMoveToggle = false;
-
+var gIsDragging = false;
 
 
 function init() {
@@ -20,11 +19,6 @@ function renderGallery(imgs) {
     elGallery.innerHTML = strHtmls.join('');
 }
 
-function ToggleMove() {
-    gMoveToggle = !gMoveToggle;
-    document.querySelector('.move-btn').innerText = (gMoveToggle) ? 'Unmove' : 'Move';
-}
-
 function changeAlign(align) {
     if (gMeme.selectedLineIdx !== -1 && gMeme.selectedLineIdx !== null) {
         changeAlignS(align);
@@ -35,9 +29,20 @@ function changeAlign(align) {
 function selectImg(imgId) {
     document.querySelector('.meme-area-container').classList.remove('display-none');
     document.querySelector('.main-container-gallery').classList.add('display-none');
+    document.querySelector('.search').classList.add('display-none');
+    document.querySelector('.gallery').classList.remove('selected');
+
     const selectedMeme = createMeme(imgId);
+    setCanvasSize(document.getElementById(imgId));
     renderCanvas();
-    //renderGallery(gImages);
+    //renderStickers();
+}
+
+function returnToGallery() {
+    document.querySelector('.meme-area-container').classList.add('display-none');
+    document.querySelector('.main-container-gallery').classList.remove('display-none');
+    document.querySelector('.search').classList.remove('display-none');
+    document.querySelector('.gallery').classList.add('selected');
 }
 
 function RemoveText() {
@@ -61,7 +66,7 @@ function addListeners() {
     addMouseListeners()
     addTouchListeners()
     window.addEventListener('resize', () => {
-        renderCanvas(gMeme)
+        renderCanvas(getMeme());
     })
 }
 
@@ -83,19 +88,18 @@ function onDown(ev) {
     if (getSelectedValue() !== -1 && getSelectedValue() !== null) {
         gStartPos = pos;
         document.body.style.cursor = 'grabbing';
-        if (!gMoveToggle) {
-            document.querySelector('.meme-text').value = getSelectedLine().txt;
-        }
+        gIsDragging = true;
     } else {
         document.querySelector('.meme-text').value = '';
         setSelectedValue(null);
+        document.body.style.cursor = 'default';
         return;
     }
     renderCanvas();
 }
 
 function onMove(ev) {
-    if (getSelectedValue() !== -1 && getSelectedValue() !== null && gMoveToggle) {
+    if (getSelectedValue() !== -1 && getSelectedValue() !== null && gIsDragging) {
         const pos = getEvPos(ev);
         const dx = pos.x - gStartPos.x;
         const dy = pos.y - gStartPos.y;
@@ -106,7 +110,11 @@ function onMove(ev) {
 }
 
 function onUp(ev) {
-    if (getSelectedValue() !== -1 && getSelectedValue() !== null && gMoveToggle) {
+    if (getSelectedValue() !== -1 && getSelectedValue() !== null) {
+        gIsDragging = false;
+        //setSelectedValue(null);
+        //document.body.style.cursor = 'grab';
+    } else {
         setSelectedValue(null);
         document.body.style.cursor = 'grab';
     }
@@ -114,8 +122,16 @@ function onUp(ev) {
 }
 
 function changeSize(diff) {
-    if (gMeme.selectedLineIdx !== -1 && gMeme.selectedLineIdx !== null) {
+    if (getSelectedValue() !== -1 && getSelectedValue() !== null) {
         changeSizeS(diff);
+        renderCanvas();
+    }
+}
+
+function changeColor() {
+    if (getSelectedValue() !== -1 && getSelectedValue() !== null) {
+        let color = document.querySelector('.color-picker-text').value;
+        changeColorS(color);
         renderCanvas();
     }
 }
@@ -170,6 +186,15 @@ function renderCanvas() {
     }
 }
 
+function renderStickers() {
+    const stickers = getStickers();
+    var elStickerHolder = document.querySelector('.stickers-holder');
+    var strHtml = stickers.map(sticker => {
+        return `<img src="${sticker.url}" onclick="selectSticker('${sticker.id}', this)">`
+    })
+    elStickerHolder.innerHTML = strHtml;
+}
+
 function drawRect(x, y, line) {
     gCtx.beginPath();
     gCtx.rect(x, y, gCtx.measureText(line.txt).width, -getSelectedLine().size);
@@ -190,4 +215,14 @@ function drawText(line, x, y) {
 function downloadImg(elLink) {
     var imgContent = gElCanvas.toDataURL('image/jpeg');
     elLink.href = imgContent;
+}
+
+function changeSearch(elText) {
+    renderGallery(getImage(elText.value));
+}
+
+function setCanvasSize(img) {
+    let ratio = img.width / img.height;
+    gElCanvas.width = 500;
+    gElCanvas.height = 500 / ratio;
 }

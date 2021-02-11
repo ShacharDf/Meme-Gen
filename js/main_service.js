@@ -2,6 +2,7 @@ var gStartPos;
 var gMeme = {
     selectedImgId: 0,
     selectedLineIdx: null,
+    selectedStickerIdx: null,
     lines: [{
         txt: '',
         size: 20,
@@ -11,12 +12,15 @@ var gMeme = {
             x: 10,
             y: 10
         }
+    }],
+    stickers: [{
+
     }]
 };
 var gImages = [{
     id: 0,
     url: 'img/1.jpg',
-    keywords: ['trump', 'idiot']
+    keywords: ['trump', 'politician']
 }, {
     id: 1,
     url: 'img/2.jpg',
@@ -52,11 +56,11 @@ var gImages = [{
 }, {
     id: 9,
     url: 'img/10.jpg',
-    keywords: ['omaba', 'idiot']
+    keywords: ['omaba', 'politician']
 }, {
     id: 10,
     url: 'img/11.jpg',
-    keywords: ['kiss', 'black-people']
+    keywords: ['kiss', 'people']
 }, {
     id: 11,
     url: 'img/12.jpg',
@@ -68,7 +72,7 @@ var gImages = [{
 }, {
     id: 13,
     url: 'img/14.jpg',
-    keywords: ['black-people']
+    keywords: ['people']
 }, {
     id: 14,
     url: 'img/15.jpg',
@@ -80,27 +84,85 @@ var gImages = [{
 }, {
     id: 16,
     url: 'img/17.jpg',
-    keywords: ['putin', 'love']
+    keywords: ['putin', 'politician']
 }, {
     id: 17,
     url: 'img/18.jpg',
     keywords: ['bla']
+}, {
+    id: 18,
+    url: 'img/19.jpg',
+    keywords: ['bla']
+}, {
+    id: 19,
+    url: 'img/20.jpg',
+    keywords: ['bla']
+}, {
+    id: 20,
+    url: 'img/21.jpg',
+    keywords: ['bla']
+}, {
+    id: 21,
+    url: 'img/22.jpg',
+    keywords: ['bla']
+}, {
+    id: 22,
+    url: 'img/23.jpg',
+    keywords: ['people', 'dance']
+}, {
+    id: 23,
+    url: 'img/24.jpg',
+    keywords: ['trump', 'politician']
+}, {
+    id: 24,
+    url: 'img/25.jpg',
+    keywords: ['opera']
 }];
 var gKeywords = {
     'cats': 1,
     'dogs': 12,
-    'idiot': 1,
     'trump': 1,
     'kids': 1,
-    'alien': 1,
-    'omaba': 1,
-    'putin': 1,
-    'bla': 1
+    'alien': 1
 };
+var gStickers = [{
+    id: 'sticker1',
+    url: 'stickers/1.png'
+}, {
+    id: 'sticker2',
+    url: 'stickers/2.png'
+}, {
+    id: 'sticker3',
+    url: 'stickers/3.png'
+}, {
+    id: 'sticker4',
+    url: 'stickers/4.png'
+}, {
+    id: 'sticker5',
+    url: 'stickers/5.png'
+}]
 
-function getImage() {
-    //TODO: Add search
-    return gImages;
+function getKeyWords(){
+    //TODO: Add key words
+}
+
+function getStickers() {
+    //TODO: 1 size stickers & sizes
+    return gStickers;
+}
+//TODO: design the search bar
+//TODO: desin the btns
+function getImage(search = '') {
+    let searchedImages = [];
+    if (!search) return gImages;
+    else {
+        searchedImages = gImages.filter(img => {
+            return img.keywords.some(word => {
+                return (word.includes(search));
+            })
+        })
+    }
+    return searchedImages;
 }
 
 function changeAlignS(align) {
@@ -168,6 +230,10 @@ function changeSizeS(diff) {
     gMeme.lines[gMeme.selectedLineIdx].size += diff;
 }
 
-function getCurrUrl(){
+function changeColorS(color) {
+    gMeme.lines[gMeme.selectedLineIdx].color = color;
+}
+
+function getCurrUrl() {
     return gImages[gMeme.selectedImgId].url;
 }
