@@ -8,13 +8,19 @@ var gMeme = {
         size: 20,
         align: 'left',
         color: 'red',
+        frame: 'white',
         pos: {
             x: 10,
             y: 10
         }
     }],
     stickers: [{
-
+        id: 1,
+        size: 1,
+        pos: {
+            x: 10,
+            y: 10
+        }
     }]
 };
 var gImages = [{
@@ -44,7 +50,7 @@ var gImages = [{
 }, {
     id: 6,
     url: 'img/7.jpg',
-    keywords: ['alien', 'kids']
+    keywords: ['kids']
 }, {
     id: 7,
     url: 'img/8.jpg',
@@ -118,40 +124,48 @@ var gImages = [{
     url: 'img/25.jpg',
     keywords: ['opera']
 }];
-var gKeywords = {
-    'cats': 1,
-    'dogs': 12,
-    'trump': 1,
-    'kids': 1,
-    'alien': 1
-};
+/*var gKeywords = {
+    'cats': 5,
+    'dogs': 4,
+    'trump': 9,
+    'kids': 2,
+    'alien': 3
+};*/
 var gStickers = [{
-    id: 'sticker1',
+    id: '0',
     url: 'stickers/1.png'
 }, {
-    id: 'sticker2',
+    id: '1',
     url: 'stickers/2.png'
 }, {
-    id: 'sticker3',
+    id: '2',
     url: 'stickers/3.png'
 }, {
-    id: 'sticker4',
+    id: '3',
     url: 'stickers/4.png'
 }, {
-    id: 'sticker5',
+    id: '4',
     url: 'stickers/5.png'
 }]
 
-function getKeyWords(){
-    //TODO: Add key words
+function getKeyWords(size) {
+    let keyWordsAndValue = [];
+    for (keyWord in gKeywords) {
+        keyWordsAndValue.push({
+            keyWord,
+            value: gKeywords[keyWord]
+        });
+    }
+    keyWordsAndValue.sort((a, b) => {
+        return b.value - a.value;
+    })
+    
+    return (keyWordsAndValue.slice(0,size));
 }
 
 function getStickers() {
-    //TODO: 1 size stickers & sizes
     return gStickers;
 }
-//TODO: design the search bar
-//TODO: desin the btns
 function getImage(search = '') {
     let searchedImages = [];
     if (!search) return gImages;
@@ -169,12 +183,17 @@ function changeAlignS(align) {
     gMeme.lines[gMeme.selectedLineIdx].align = align;
 }
 
-function removeTextS() {
-    gMeme.lines.splice(gMeme.selectedLineIdx, 1);
-    gMeme.selectedLineIdx = null;
+function removeTextS(isLine) {
+    if(isLine){
+        gMeme.lines.splice(gMeme.selectedLineIdx, 1);
+        gMeme.selectedLineIdx = null;
+    }else{
+        gMeme.stickers.splice(gMeme.selectedStickerIdx, 1);
+        gMeme.selectedStickerIdx = null;
+    }
 }
 
-function addTextS(text, color) {
+function addTextS(text, color, frame) {
     let pos = (gMeme.lines.length === 0) ? {
         x: 0,
         y: 50
@@ -187,6 +206,7 @@ function addTextS(text, color) {
         size: 50,
         align: 'left',
         color: color,
+        frame: frame,
         pos: {
             x: pos.x,
             y: pos.y
@@ -195,13 +215,26 @@ function addTextS(text, color) {
     gMeme.lines.push(line);
 }
 
+function addStickerS(stickerId) {
+    const stkr = {
+        id: stickerId,
+        size: 1,
+        url: gStickers[stickerId].url,
+        pos: {
+            x: 10,
+            y: 10
+        }
+    }
+    gMeme.stickers.push(stkr);
+}
+
 function createMeme(imgId) {
     gMeme = {
         selectedImgId: imgId,
         selectedLineIdx: null,
+        selectedStickerIdx: null,
         lines: [],
-        canvasW: null,
-        canvasH: null
+        stickers: []
     };
 }
 
@@ -217,6 +250,14 @@ function setSelectedValue(idx) {
     gMeme.selectedLineIdx = idx;
 }
 
+function setSelectedSticker(idx) {
+    gMeme.selectedStickerIdx = idx;
+}
+
+function getSelectedSticker() {
+    return gMeme.selectedStickerIdx;
+}
+
 function getSelectedLine() {
     return gMeme.lines[gMeme.selectedLineIdx];
 }
@@ -226,12 +267,22 @@ function updateLinePos(dx, dy) {
     gMeme.lines[gMeme.selectedLineIdx].pos.y += dy;
 }
 
-function changeSizeS(diff) {
-    gMeme.lines[gMeme.selectedLineIdx].size += diff;
+function updatestickerPos(dx, dy) {
+    gMeme.stickers[gMeme.selectedStickerIdx].pos.x += dx;
+    gMeme.stickers[gMeme.selectedStickerIdx].pos.y += dy;
 }
 
-function changeColorS(color) {
+function changeSizeS(diff) {
+    if (gMeme.selectedLineIdx !== null) gMeme.lines[gMeme.selectedLineIdx].size += diff;
+    else if (gMeme.selectedStickerIdx !== null) gMeme.stickers[gMeme.selectedStickerIdx].size += diff * 0.1;
+}
+
+function changeColorInS(color) {
     gMeme.lines[gMeme.selectedLineIdx].color = color;
+}
+
+function changeColorOutS(color) {
+    gMeme.lines[gMeme.selectedLineIdx].frame = color;
 }
 
 function getCurrUrl() {
