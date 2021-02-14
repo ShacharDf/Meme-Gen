@@ -8,12 +8,26 @@
 <body onload="init()">
   <!-- nav -->
   <div class="main-header flex justify-center align-items-center">
-    <div class="logo"><img class="logo" src="icns/logo-simp.png"> </div>
+    <div class="logo" onclick="returnToGallery()"><img class="logo" src="icns/logo-simp.png"> </div>
     <ul class="main-nav flex row-reverse clean-list">
-      <li class="flex clean-list"><a href="#">About</a></li>
+      <li class="flex clean-list"><a href="#" class="about-btn" onclick="openModal()">About</a></li>
       <li class="flex clean-list"><a href="#" onclick="returnToGallery()" class="selected gallery">Gallery</a></li>
     </ul>
   </div>
+
+<!-- Modal -->
+<div class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Made by Shachar Dorfzaun</h2>
+    </div>
+    <div class="modal-body">
+      <p>To see more visit my Git</p>
+      <p><a href="https://github.com/ShacharDf?tab=repositories" target="_blank">Press me :-)</a></p>
+    </div>
+  </div>
+</div>
+
 
   <!-- search -->
   <div class="search flex justify-center">
@@ -39,21 +53,21 @@
 
     <!-- edit -->
     <div class="meme-prop flex column justify-space-even justify-center">
-      <input class="meme-text" type="text" placeholder="enter text">
+      <input class="meme-text" type="text" placeholder="enter text" oninput="onAddText(false)">
       <div class="buttons-holder flex align-items-center justify-center">
-        <button class="btn" onclick="addText()"><img class="img-btn" src="icns/icn-add.png"></button>
-        <button class="btn" onclick="RemoveText()"><img class="img-btn" src="icns/Remove.png"></button>
+        <button class="btn" onclick="onAddText(true)"><img class="img-btn" src="icns/icn-add.png"></button>
+        <button class="btn" onclick="onRemoveText()"><img class="img-btn" src="icns/Remove.png"></button>
         <button class="btn picker-frame"><img class="picker-img" src="icns/icn-stroke-color.png"><input
-            class="btn color color-picker-frame" onchange="changeColorOut()" type="color"></button>
+            class="btn color color-picker-frame" onchange="onChangeColorOut()" type="color"></button>
       </div>
       <div class="meme-design flex align-items-center justify-center">
-        <button class="btn" onclick="changeSize(2)"><img src="icns/icn-a-plus.png"></button>
-        <button class="btn" onclick="changeSize(-2)"><img src="icns/icn-a-minus.png"></button>
+        <button class="btn" onclick="onChangeSize(2)"><img src="icns/icn-a-plus.png"></button>
+        <button class="btn" onclick="onChangeSize(-2)"><img src="icns/icn-a-minus.png"></button>
         <!-- <button class="btn"  onclick="changeAlign('left')">align L</button>
         <button class="btn"  onclick="changeAlign('center')">align C</button>
         <button class="btn"  onclick="changeAlign('right')">align R</button> --->
         <button class="btn picker-text"><img src="icns/icn-color-palette.png"><input class="btn color color-picker-text"
-            onchange="changeColorIn()" type="color"></button>
+            onchange="onChangeColorIn()" type="color"></button>
       </div>
 
       <!-- stickersssssssss-->
@@ -64,12 +78,13 @@
         <form action="" method="POST" enctype="multipart/form-data" onsubmit="uploadImg(this, event)">
           <input name="img" id="imgData" type="hidden" />
           <button class="share" type="submit">Share</button>
-          <button class="download"><a class="btn" href="#" onclick="downloadImg(this)" download="my-meme.jpg">Download </button>
-            <div class="share-container"></div>
+          <button class="download"><a class="btn" href="#" onclick="downloadImg(this)" download="my-meme.jpg"></a>
+            Download</button>
+          <div class="share-container"></div>
         </form>
       </div>
 
-      
+
     </div>
 
   </div>

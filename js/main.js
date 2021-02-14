@@ -1,13 +1,13 @@
+var gStartPos;
 var gElCanvas = document.querySelector('#my-canvas');
 var gCtx = gElCanvas.getContext('2d');
 const gTouchEvs = ['touchstart', 'touchmove', 'touchend']
 var gIsDragging = false;
+var gIsNewLine = false;
 
 function init() {
     renderGallery(getImage());
-    //renderKeyWords(5);
     addListeners();
-    //renderCanvas(gMeme);
 }
 
 
@@ -16,7 +16,6 @@ function renderGallery(imgs) {
     var strHtmls = imgs.map(img => {
         return `<img class="meme-img" src="${img.url}" id="${img.id}" alt="meme-img" onclick="selectImg('${img.id}')">`
     });
-    elGallery.innerHTML = ''
     elGallery.innerHTML = strHtmls.join('');
 }
 
@@ -28,12 +27,6 @@ function renderKeyWords(amount) {
     elKeyWords.innerHTML = strHtml.join('');
 }
 
-function changeAlign(align) {
-    if (gMeme.selectedLineIdx !== -1 && gMeme.selectedLineIdx !== null) {
-        changeAlignS(align);
-        renderCanvas();
-    }
-}
 function selectImg(imgId) {
     document.querySelector('.meme-area-container').classList.remove('display-none');
     document.querySelector('.main-container-gallery').classList.add('display-none');
@@ -53,27 +46,29 @@ function returnToGallery() {
     document.querySelector('.gallery').classList.add('selected');
 }
 
-function RemoveText() {
+function onRemoveText() {
     if (getSelectedValue() !== -1 && getSelectedValue() !== null) {
-        removeTextS(true);
-    }else if(getSelectedSticker() !== -1 && getSelectedSticker() !== null){
-        removeTextS(false);
+        removeText(true);
+    } else if (getSelectedSticker() !== -1 && getSelectedSticker() !== null) {
+        removeText(false);
     }
     renderCanvas();
 }
 
-function addText() {
-    if (gMeme.selectedLineIdx !== -1 && gMeme.selectedLineIdx !== null) {
-        gMeme.lines[gMeme.selectedLineIdx].txt = document.querySelector('.meme-text').value;
+function onAddText(gIsNewLine) {
+    if (getSelectedValue() !== -1 && getSelectedValue() !== null) {
+        getSelectedLine().txt = document.querySelector('.meme-text').value;
     } else {
-        addTextS(document.querySelector('.meme-text').value, document.querySelector('.color-picker-text').value, document.querySelector('.color-picker-frame').value);
-        document.querySelector('.meme-text').value = '';
+        if (document.querySelector('.meme-text').value !== '' && gIsNewLine) {
+            addText(document.querySelector('.meme-text').value, document.querySelector('.color-picker-text').value, document.querySelector('.color-picker-frame').value);
+            document.querySelector('.meme-text').value = '';
+        }
     }
     renderCanvas();
 }
 
 function selectSticker(stickerId, elImg) {
-    addStickerS(stickerId);
+    addSticker(stickerId);
     renderCanvas();
 }
 
@@ -105,6 +100,7 @@ function onDown(ev) {
         gStartPos = pos;
         document.body.style.cursor = 'grabbing';
         gIsDragging = true;
+        document.querySelector('.meme-text').value = getSelectedLine().txt;
     } else {
         document.querySelector('.meme-text').value = '';
         setSelectedValue(null);
@@ -152,27 +148,29 @@ function onUp(ev) {
     renderCanvas();
 }
 
-function changeSize(diff) {
+function onChangeSize(diff) {
     if ((getSelectedValue() !== -1 && getSelectedValue() !== null) || (getSelectedSticker() !== -1 && getSelectedSticker() !== null)) {
-        changeSizeS(diff);
+        changeSize(diff);
         renderCanvas();
     }
 }
 
-function changeColorIn() {
+function onChangeColorIn() {
     let color = document.querySelector('.color-picker-text').value;
     document.querySelector('.picker-text').style.background = color;
     if (getSelectedValue() !== -1 && getSelectedValue() !== null) {
-        changeColorInS(color);
+        //changeColorIn(color);
+        changeColor(color, 'color');
         renderCanvas();
     }
 }
 
-function changeColorOut() {
+function onChangeColorOut() {
     let color = document.querySelector('.color-picker-frame').value;
     document.querySelector('.picker-frame').style.background = color;
     if (getSelectedValue() !== -1 && getSelectedValue() !== null) {
-        changeColorOutS(color);
+        //changeColorOut(color);
+        changeColor(color, 'frame');
         renderCanvas();
     }
 }
@@ -254,7 +252,7 @@ function renderStickers() {
     const stickers = getStickers();
     var elStickerHolder = document.querySelector('.stickers-holder');
     var strHtml = stickers.reduce((acc, sticker) => {
-        return `<img class="sticker-btn" src="${sticker.url}" onclick="selectSticker('${sticker.id}', this)">`  + acc
+        return `<img class="sticker-btn" src="${sticker.url}" onclick="selectSticker('${sticker.id}', this)">` + acc
     }, '')
     elStickerHolder.innerHTML = strHtml;
 }
@@ -294,7 +292,7 @@ function downloadImg(elLink) {
     elLink.href = imgContent;
 }
 
-function changeSearch(elText) {
+function onChangeSearch(elText) {
     renderGallery(getImage(elText.value));
 }
 
@@ -304,3 +302,24 @@ function setCanvasSize(img) {
     gElCanvas.height = 500 / ratio;
 }
 
+function openModal() {
+    var elModal = document.querySelector(".modal");
+    elModal.style.display = "block";
+    document.querySelector('.about-btn').classList.add('selected');
+
+}
+
+window.onclick = function (event) {
+    var elModal = document.querySelector(".modal");
+    if (event.target == elModal) {
+        elModal.style.display = "none";
+        document.querySelector('.about-btn').classList.remove('selected');
+    }
+}
+
+function changeAlign(align) {
+    if (gMeme.selectedLineIdx !== -1 && gMeme.selectedLineIdx !== null) {
+        changeAlignS(align);
+        renderCanvas();
+    }
+}

@@ -1,4 +1,3 @@
-var gStartPos;
 var gMeme = {
     selectedImgId: 0,
     selectedLineIdx: null,
@@ -159,13 +158,14 @@ function getKeyWords(size) {
     keyWordsAndValue.sort((a, b) => {
         return b.value - a.value;
     })
-    
-    return (keyWordsAndValue.slice(0,size));
+
+    return (keyWordsAndValue.slice(0, size));
 }
 
 function getStickers() {
     return gStickers;
 }
+
 function getImage(search = '') {
     let searchedImages = [];
     if (!search) return gImages;
@@ -179,21 +179,17 @@ function getImage(search = '') {
     return searchedImages;
 }
 
-function changeAlignS(align) {
-    gMeme.lines[gMeme.selectedLineIdx].align = align;
-}
-
-function removeTextS(isLine) {
-    if(isLine){
+function removeText(isLine) {
+    if (isLine) {
         gMeme.lines.splice(gMeme.selectedLineIdx, 1);
         gMeme.selectedLineIdx = null;
-    }else{
+    } else {
         gMeme.stickers.splice(gMeme.selectedStickerIdx, 1);
         gMeme.selectedStickerIdx = null;
     }
 }
 
-function addTextS(text, color, frame) {
+function addText(text, color, frame) {
     let pos = (gMeme.lines.length === 0) ? {
         x: 0,
         y: 50
@@ -215,7 +211,7 @@ function addTextS(text, color, frame) {
     gMeme.lines.push(line);
 }
 
-function addStickerS(stickerId) {
+function addSticker(stickerId) {
     const stkr = {
         id: stickerId,
         size: 1,
@@ -272,19 +268,27 @@ function updatestickerPos(dx, dy) {
     gMeme.stickers[gMeme.selectedStickerIdx].pos.y += dy;
 }
 
-function changeSizeS(diff) {
+function changeSize(diff) {
     if (gMeme.selectedLineIdx !== null) gMeme.lines[gMeme.selectedLineIdx].size += diff;
     else if (gMeme.selectedStickerIdx !== null) gMeme.stickers[gMeme.selectedStickerIdx].size += diff * 0.1;
 }
 
-function changeColorInS(color) {
+function changeColorIn(color) {
     gMeme.lines[gMeme.selectedLineIdx].color = color;
 }
 
-function changeColorOutS(color) {
+function changeColorOut(color) {
     gMeme.lines[gMeme.selectedLineIdx].frame = color;
+}
+
+function changeColor(color, key) {
+    gMeme.lines[gMeme.selectedLineIdx][key] = color;
 }
 
 function getCurrUrl() {
     return gImages[gMeme.selectedImgId].url;
+}
+
+function changeAlignS(align) {
+    gMeme.lines[gMeme.selectedLineIdx].align = align;
 }
